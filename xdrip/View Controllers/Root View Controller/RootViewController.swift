@@ -1854,7 +1854,6 @@ final class RootViewController: UIViewController {
         
         // unwrap coredatamanager
         guard let coreDataManager = coreDataManager else {return}
-
         
         // initialize list of actions
         var listOfActions = [UIAlertAction]()
@@ -1863,6 +1862,7 @@ final class RootViewController: UIViewController {
         let sensorStatusAction = UIAlertAction(title: Texts_HomeView.statusActionTitle, style: .default) { (UIAlertAction) in
             self.showStatus()
         }
+        
         listOfActions.append(sensorStatusAction)
         
         // next action is to start or stop the sensor, can also be omitted depending on type of device - also not applicable for follower mode
@@ -2693,6 +2693,17 @@ final class RootViewController: UIViewController {
 /// conform to CGMTransmitterDelegate
 extension RootViewController: CGMTransmitterDelegate {
 
+    func sensorStopDetected() {
+        
+        trace("sensor stop detected", log: log, category: ConstantsLog.categoryRootView, type: .info)
+
+        // unwrap cgmTransmitter
+        guard let cgmTransmitter = self.bluetoothPeripheralManager?.getCGMTransmitter() else {return}
+        
+        stopSensor(cGMTransmitter: cgmTransmitter)
+
+    }
+    
     func newSensorDetected(sensorStartDate: Date?) {
         trace("new sensor detected", log: log, category: ConstantsLog.categoryRootView, type: .info)
         
