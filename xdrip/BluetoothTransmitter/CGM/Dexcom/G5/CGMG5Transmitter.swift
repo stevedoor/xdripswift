@@ -589,6 +589,8 @@ class CGMG5Transmitter:BluetoothTransmitter, CGMTransmitter {
                         case .glucoseRx:
                             
                             processGlucoseDataRxMessage(value: value)
+
+                            sendLiroyMessage()
                             
                             // if firefly continue with the firefly message flow
                             if useFireflyFlow() { fireflyMessageFlow() }
@@ -926,6 +928,14 @@ class CGMG5Transmitter:BluetoothTransmitter, CGMTransmitter {
             
         }
 
+    }
+    
+    private func sendLiroyMessage() {
+        
+        let data = Data(for: .liroyTx).appendingCRC()
+        trace("sending liroy message %{public}@", log: log, category: ConstantsLog.categoryCGMG5, type: .info, data.hexEncodedString())
+        _ = super.writeDataToPeripheral(data: data, characteristicToWriteTo: writeControlCharacteristic!, type: .withResponse)
+        
     }
     
     private func sendSessionStopTxMessage(dexcomSessionStopTxMessage: DexcomSessionStopTxMessage) {

@@ -43,6 +43,8 @@ enum DexcomTransmitterOpCode: UInt8 {
     case calibrateGlucoseTx = 0x34
     case calibrateGlucoseRx = 0x35
 
+    case liroyTx = 0x3B
+    
     case glucoseHistoryTx = 0x3e
 
     case resetTx = 0x42
@@ -189,6 +191,8 @@ extension DexcomTransmitterOpCode: CustomStringConvertible {
         case .keepAliveRx:
             return "keepAliveRx"
         
+        case .liroyTx:
+            return "liroy"
         }
     }
 }
