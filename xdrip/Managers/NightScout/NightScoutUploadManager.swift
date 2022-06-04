@@ -1047,7 +1047,8 @@ public class NightScoutUploadManager: NSObject {
         
         uploadDataAndGetResponse(dataToUpload: dataToUpload, httpMethod: httpMethod, path: path) { _, nightScoutResult  in
             
-			if let completionHandler = completionHandler {
+            // completion handler to be called only if upload as successful
+            if let completionHandler = completionHandler, nightScoutResult.successFull() {
                 
 				completionHandler()
                 
@@ -1139,6 +1140,9 @@ public class NightScoutUploadManager: NSObject {
                         // error cases
                         if let error = error {
                             trace("    failed to upload, error = %{public}@", log: self.oslog, category: ConstantsLog.categoryNightScoutUploadManager, type: .error, error.localizedDescription)
+                            
+                            completionHandler(nil, NightScoutResult.failed)
+                            
                             return
                         }
                         
@@ -1185,6 +1189,8 @@ public class NightScoutUploadManager: NSObject {
                                                             
                                 trace("    failed to upload, statuscode = %{public}@", log: self.oslog, category: ConstantsLog.categoryNightScoutUploadManager, type: .error, response.statusCode.description)
                                 
+                                completionHandler(nil, NightScoutResult.failed)
+                                
                                 return
                                 
                             }
@@ -1219,6 +1225,8 @@ public class NightScoutUploadManager: NSObject {
         } catch let error {
             
             trace("     error : %{public}@", log: self.oslog, category: ConstantsLog.categoryNightScoutUploadManager, type: .info, error.localizedDescription)
+            
+            completionHandler(nil, NightScoutResult.failed)
             
         }
 
